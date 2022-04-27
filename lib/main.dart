@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firestore/model/employee.dart';
 import 'package:firestore/page/dashboad_page.dart';
+import 'package:firestore/page/update_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,15 +73,57 @@ class _MyHomePageState extends State<MyHomePage> {
             return ListView.builder(
                 itemCount: snapshot.data!.size,
                 itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text(temm[index].doc['name']),
-                      subtitle: const Text('data'),
+                  return Slidable(
+                    startActionPane: ActionPane(
+                      dismissible: DismissiblePane(onDismissed: () {}),
+                      motion: const ScrollMotion(),
+                      children: const [
+                        SlidableAction(
+                          onPressed: null,
+                          backgroundColor: Color(0xFFFE4A49),
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: 'Delete',
+                        ),
+                      ],
+                    ),
+                    child: InkWell(
+                      onLongPress: (() {}),
+                      onTap: (() {
+                        setState(() {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UpdatePage(
+                                    id: temm[index].doc['id'],
+                                    name: temm[index].doc['name'],
+                                    age: temm[index].doc['age'],
+                                    salary: temm[index].doc['salary']),
+                              ));
+                        });
+                      }),
+                      child: Card(
+                        child: ListTile(
+                          title: Text(
+                            temm[index].doc['name'],
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          subtitle: Text(
+                            'Age :  ${temm[index].doc['age']}',
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          trailing: Text(
+                            'Salary: \$ ${temm[index].doc['salary']}',
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.red),
+                          ),
+                        ),
+                      ),
                     ),
                   );
                 });
           }
-          return SizedBox();
+          return const SizedBox();
         },
       ),
       floatingActionButton: FloatingActionButton(

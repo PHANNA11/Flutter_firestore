@@ -5,14 +5,24 @@ import 'package:firestore/model/employee.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DashBoardPage extends StatefulWidget {
-  const DashBoardPage({Key? key}) : super(key: key);
+class UpdatePage extends StatefulWidget {
+  UpdatePage(
+      {required this.id,
+      required this.name,
+      required this.age,
+      required this.salary,
+      Key? key})
+      : super(key: key);
+  late String id;
+  late String name;
+  late int age;
+  late double salary;
 
   @override
-  State<DashBoardPage> createState() => _DashBoardPageState();
+  State<UpdatePage> createState() => _UpdatePageState();
 }
 
-class _DashBoardPageState extends State<DashBoardPage> {
+class _UpdatePageState extends State<UpdatePage> {
   TextEditingController IDController = TextEditingController();
   TextEditingController NameController = TextEditingController();
   TextEditingController AgeController = TextEditingController();
@@ -21,32 +31,33 @@ class _DashBoardPageState extends State<DashBoardPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      IDController.text = widget.id;
+      NameController.text = widget.name;
+      AgeController.text = widget.age.toString();
+      SalaryController.text = widget.salary.toString();
+    });
   }
 
-  Future createEmployee(
-      {String? id,
-      required String name,
-      required int age,
-      required double salary}) async {
-    final docEmployee = FirebaseFirestore.instance.collection('employee').doc();
-    final emp =
-        Employee(id: docEmployee.id, name: name, age: age, salary: salary);
-    final json = emp.toJson();
-    await docEmployee.set(json);
-    //  return 'null';
-  }
+  // Future createEmployee(
+  //     {String? id,
+  //     required String name,
+  //     required int age,
+  //     required double salary}) async {
+  //   final docEmployee = FirebaseFirestore.instance.collection('employee').doc();
+  //   final emp =
+  //       Employee(id: docEmployee.id, name: name, age: age, salary: salary);
+  //   final json = emp.toJson();
+  //   await docEmployee.set(json);
+  //   //  return 'null';
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hello'),
+        title: const Text('Edit Employee\'s Infor'),
         actions: [
-          IconButton(
-              onPressed: () async {}, icon: const Icon(Icons.get_app_outlined)),
-          const SizedBox(
-            width: 30,
-          ),
           IconButton(
               onPressed: () {},
               icon: const Icon(
@@ -113,20 +124,20 @@ class _DashBoardPageState extends State<DashBoardPage> {
             width: 200,
             //  color: Colors.amber,
             child: CupertinoButton(
-              child: const Text('Create'),
+              child: const Text('Save'),
               onPressed: () {
-                createEmployee(
-                  id: IDController.text,
-                  name: NameController.text,
-                  age: int.parse(AgeController.text),
-                  salary: double.parse(SalaryController.text),
-                ).whenComplete(() => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const MyHomePage(title: 'List Employee'),
-                    ),
-                    (route) => false));
+                // createEmployee(
+                //   id: IDController.text,
+                //   name: NameController.text,
+                //   age: int.parse(AgeController.text),
+                //   salary: double.parse(SalaryController.text),
+                // ).whenComplete(() => Navigator.pushAndRemoveUntil(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) =>
+                //           const MyHomePage(title: 'List Employee'),
+                //     ),
+                //     (route) => false));
               },
               color: Colors.red[400],
             ),
